@@ -15,13 +15,22 @@ ADoor::ADoor()
 void ADoor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *DoorName);
+	StartLocation = GetActorLocation();
 }
 
 // Called every frame
 void ADoor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	MoveDoor(DeltaTime);
+}
 
+void ADoor::MoveDoor(float DeltaTime) {
+	FVector CurrentDoorLocation = GetActorLocation();
+	FVector NewDoorLocation = CurrentDoorLocation + (Axes * Speed * DeltaTime);
+
+	if (FVector::Dist(StartLocation, NewDoorLocation) <= MaxDistanceToMove)
+		SetActorLocation(NewDoorLocation);
 }
 
